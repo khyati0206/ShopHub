@@ -6,7 +6,9 @@ const connectDB = async () => {
   }
 
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI);
+    const conn = await mongoose.connect(process.env.MONGODB_URI, {
+      dbName: process.env.MONGODB_DB_NAME || 'shophub',
+    });
     console.log(`MongoDB connected: ${conn.connection.host}`);
     return conn;
   } catch (error) {

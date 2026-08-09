@@ -1,24 +1,16 @@
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-import Product from '../models/Product.js';
-import catalog from './productsCatalog.js';
+import connectDB from '../config/db.js';
+import { seedProducts } from './runSeed.js';
 
 dotenv.config();
 
-const seedProducts = async () => {
+const run = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/shophub');
-    console.log('Connected to MongoDB');
-
-    await Product.deleteMany({});
-    console.log('Cleared existing products');
-
-    // Strip seed-only fields before insert (slug is kept in DB for custom image lookups)
-    const products = catalog.map(({ useLocalImages, ...product }) => product);
-
-    await Product.insertMany(products);
-    console.log(`Seeded ${products.length} products`);
-
+    await connectDB();
+    const result = await seedProducts({ force: true });
+    console.log(result.seeded ? 'Seed complete.' : 'Nothing to seed.');
+    await mongoose.disconnect();
     process.exit(0);
   } catch (error) {
     console.error('Seed error:', error);
@@ -26,4 +18,4 @@ const seedProducts = async () => {
   }
 };
 
-seedProducts();
+run();
