@@ -18,6 +18,7 @@ const allowedOrigins = [
   process.env.CLIENT_URL,
   process.env.VERCEL_URL && `https://${process.env.VERCEL_URL}`,
   process.env.VERCEL_BRANCH_URL && `https://${process.env.VERCEL_BRANCH_URL}`,
+  process.env.RENDER_EXTERNAL_URL,
   'http://localhost:5173',
 ].filter(Boolean);
 

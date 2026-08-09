@@ -1,0 +1,30 @@
+# ShopHub backend — deploy on Render (Blueprint)
+# Docs: https://render.com/docs/blueprint-spec
+#
+# After deploy:
+#   1. Set MONGODB_URI, GEMINI_API_KEY, and CLIENT_URL in the Render dashboard.
+#   2. On Vercel, set VITE_API_URL=https://<your-render-service>.onrender.com/api
+#   3. Seed the database once: npm run seed (locally with Atlas MONGODB_URI in server/.env)
+
+services:
+  - type: web
+    name: shophub-api
+    runtime: node
+    region: singapore
+    plan: free
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: CLIENT_URL
+        sync: false
